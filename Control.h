@@ -98,8 +98,6 @@ class Control
       _rightMotor.go(-rotationSpeed);
     }
 
-
-  
     int speed;
     int rotationSpeed;         
     int insideTurnSpeed;

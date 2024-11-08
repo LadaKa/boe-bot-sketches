@@ -6,16 +6,10 @@
  */
  
 #include "Arduino.h"
+#include "Config.h"
 #include <Servo.h>
 #include "Enums.h"
 #include "Robot.h"
-
-#define BUTTON_PIN 2
-
-#define LED_PIN 11
-
-#define L_WHEEL_PIN 12
-#define R_WHEEL_PIN 13
 
 #define MIN_PULSE  500
 #define MAX_PULSE 2500
@@ -32,28 +26,34 @@ Enums::State start_state;
 
 void setup() {
 
-  Serial.begin(11960);         
+  Serial.begin(115200);         
   
   //  button setup
   pinMode(BUTTON_PIN, INPUT_PULLUP);
- // attachInterrupt(
- //   digitalPinToInterrupt(BUTTON_PIN), onButtonPressed, FALLING);
+  attachInterrupt(
+    digitalPinToInterrupt(BUTTON_PIN), onButtonPressed, FALLING);
   lastButtonPressTime = 0;
   
   //  led setup
   pinMode(LED_PIN, OUTPUT);
 
   //  robot setup
-  robot.setMotorsAndSpeed(
-    L_WHEEL_PIN, R_WHEEL_PIN, MIN_PULSE, MAX_PULSE, SPEED, TURN_SPEED);
+  robot.setMotors(MIN_PULSE, MAX_PULSE, SPEED, TURN_SPEED);
   robot.setState(Enums::BeforeStart);
+
+  /*Serial.print(digitalRead(A0));
+  Serial.print(digitalRead(A1));
+  Serial.print(digitalRead(A2));
+  Serial.print(digitalRead(A3));
+  Serial.println(digitalRead(A4));
+  delay(1000);*/
 }
 
 
 void loop() {
 
   Enums::State state = robot.getState();
-  
+
   switch (state) {
     
     case Enums::Running:
@@ -61,6 +61,7 @@ void loop() {
       return;
     
     case Enums::BeforeStart:
+      //robot.stopMotors();
       return;
       
     default:
@@ -72,14 +73,16 @@ void loop() {
 
 // button press handler (using interrupt)
 void onButtonPressed() {
+
+  //robot.flash();
   
   int currentTime = millis();
   if ((currentTime - lastButtonPressTime) < 1000)
     return;
 
-  robot.flash();
+  //robot.flash();
   lastButtonPressTime = currentTime;
-  
+
   switch (robot.getState()) {
     
     case Enums::BeforeStart:
@@ -87,7 +90,9 @@ void onButtonPressed() {
       return;
     
     case Enums::Running:
+      robot.stopMotors();
       robot.setState(Enums::BeforeStart);
+      robot.flash();
       return;
       
     default:
