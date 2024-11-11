@@ -36,7 +36,7 @@ public:
     return state;
   }
 
-  /* behaviour */
+  /* behavior */
 
   // state Running:
   // follow the black line
@@ -48,27 +48,32 @@ public:
       return;
     }
 
-    stopMotors();
-    return;  // TODO: remove this
-
     // outside the line
-    Enums::Direction last_inner_sensor_side;
     if (sensors.isLeftInnerOnBlack()) {
-      last_inner_sensor_side = Enums::Left;
+      control.move(Enums::Left);
+     // control.rotateLeft();
+    } else if (sensors.isRightInnerOnBlack()) {
+      control.move(Enums::Right);
+      //control.rotateRight();
     } else {
-      last_inner_sensor_side = Enums::Right;
-    }
-
-    while (!sensors.isMiddleOnBlack()) {
-      control.moveInOppositeDirection(last_inner_sensor_side);
-      if (sensors.isLeftInnerOnBlack()) {
-        last_inner_sensor_side = Enums::Left;
-      } else {
-        last_inner_sensor_side = Enums::Right;
-      }
+      control.stop();
+      rotateUntilOnLine();
     }
   }
 
+  // recovery rotation (outside the line)
+  void rotateUntilOnLine() {
+    flash();
+    while (!sensors.isMiddleOnBlack()) {
+      if (sensors.isLeftInnerOnBlack()) {
+        control.rotateLeft();
+        delay(300);
+      } else {
+        control.rotateRight();
+        delay(300);
+      }
+    }
+  }
 
   // state BeforeStart:
   // stop
@@ -76,9 +81,7 @@ public:
     control.stop();
   }
 
-  void testSensors() {
-    sensors.printSensors();
-  }
+
 
   /* utils */
 
@@ -88,6 +91,10 @@ public:
     delay(200);
     digitalWrite(LED_PIN, LOW);
     delay(200);
+  }
+
+  void testSensors() {
+    sensors.printSensors();
   }
 };
 

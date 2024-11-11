@@ -14,4 +14,11 @@
 #define SENSOR_R_INNER A3
 #define SENSOR_R_OUTER A4
 
+
+#define MIN_PULSE  500
+#define MAX_PULSE 2500
+
+#define SPEED 160//150
+#define TURN_SPEED 30 //30
+
 #endif#

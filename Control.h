@@ -60,6 +60,19 @@ class Control
       move(last_inner_sensor_side);
     }
 
+    void rotateLeft()
+    {
+      _leftMotor.go( -rotationSpeed);
+      _rightMotor.go( rotationSpeed);
+    }
+
+    void rotateRight()
+    {
+      _leftMotor.go(  rotationSpeed);
+      _rightMotor.go(-rotationSpeed);
+    }
+
+
     void stop()
     {
       _leftMotor.stop();
@@ -76,27 +89,19 @@ class Control
 
     void turnLeft()
     {
-      _leftMotor.go(insideTurnSpeed);
+      //_leftMotor.go(insideTurnSpeed);
+      _leftMotor.stop();
       _rightMotor.go(outsideTurnSpeed);
     }
     
     void turnRight()
     {
+      _rightMotor.stop();
       _leftMotor.go(outsideTurnSpeed);
-      _rightMotor.go(insideTurnSpeed);
+      
+      //_rightMotor.go(insideTurnSpeed);
     }
     
-    void rotateLeft()
-    {
-      _leftMotor.go( -rotationSpeed);
-      _rightMotor.go( rotationSpeed);
-    }
-
-    void rotateRight()
-    {
-      _leftMotor.go(  rotationSpeed);
-      _rightMotor.go(-rotationSpeed);
-    }
 
     int speed;
     int rotationSpeed;         

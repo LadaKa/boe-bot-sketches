@@ -11,11 +11,6 @@
 #include "Enums.h"
 #include "Robot.h"
 
-#define MIN_PULSE  500
-#define MAX_PULSE 2500
-
-#define SPEED 200
-#define TURN_SPEED 40
 
 Robot robot;
 
@@ -41,12 +36,6 @@ void setup() {
   robot.setMotors(MIN_PULSE, MAX_PULSE, SPEED, TURN_SPEED);
   robot.setState(Enums::BeforeStart);
 
-  /*Serial.print(digitalRead(A0));
-  Serial.print(digitalRead(A1));
-  Serial.print(digitalRead(A2));
-  Serial.print(digitalRead(A3));
-  Serial.println(digitalRead(A4));
-  delay(1000);*/
 }
 
 
@@ -61,7 +50,7 @@ void loop() {
       return;
     
     case Enums::BeforeStart:
-      //robot.stopMotors();
+      robot.stopMotors();
       return;
       
     default:
