@@ -15,6 +15,10 @@ private:
   Sensors sensors;
 
   Enums::State state;  // {BeforeStart, Running}
+  
+  int leftSpeedDegree = 0;
+  int rightSpeedDegree = 0;
+  int step = 1;
 
 public:
 
@@ -26,6 +30,7 @@ public:
     int minPulse, int maxPulse, int speed, int turn_speed) {
     control.setMotors(L_WHEEL_PIN, R_WHEEL_PIN, minPulse, maxPulse);
     control.setSpeed(speed, turn_speed);
+    
   }
 
   void setState(Enums::State s) {
@@ -42,23 +47,34 @@ public:
   // follow the black line
   void followTheLine() {
 
-    if (sensors.isMiddleOnBlack()) {
-      // on the line
-      control.move(Enums::Forward);
-      return;
-    }
 
     // outside the line
     if (sensors.isLeftInnerOnBlack()) {
+      
+      if (leftSpeedDegree<500)
+        leftSpeedDegree++;
+      //control.turnLeft(leftSpeedDegree);
       control.move(Enums::Left);
-     // control.rotateLeft();
-    } else if (sensors.isRightInnerOnBlack()) {
-      control.move(Enums::Right);
-      //control.rotateRight();
-    } else {
-      control.stop();
-      rotateUntilOnLine();
+    } 
+    else if (sensors.isRightInnerOnBlack()) {
+      if (rightSpeedDegree<500)
+        rightSpeedDegree++;
+      //control.turnRight(rightSpeedDegree);
+      control.move(Enums::Rigth);
+    } 
+    else if (sensors.isMiddleOnBlack()) {
+      // on the line
+      leftSpeedDegree=0;
+      rightSpeedDegree=0;
+      control.move(Enums::Forward);
     }
+    else {
+      //control.stop();
+      //rotateUntilOnLine();
+    }
+    
+    
+    
   }
 
   // recovery rotation (outside the line)

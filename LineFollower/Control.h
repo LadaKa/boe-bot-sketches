@@ -18,7 +18,7 @@ class Control
 
     void setMotors(int leftPin, int rightPin, int minPulse, int maxPulse)
     {
-      int centerPulse = (minPulse + maxPulse) / 2;
+      centerPulse = (minPulse + maxPulse) / 2;
 
       _leftMotor.attach(leftPin, minPulse, maxPulse);
       _leftMotor.setCenterPulseAndDirection(centerPulse, false);
@@ -54,10 +54,16 @@ class Control
       }
     }
 
-
-    void moveInOppositeDirection(Enums::Direction last_inner_sensor_side)
+    void turnLeft(int turnSpeed)
     {
-      move(last_inner_sensor_side);
+      _leftMotor.stop();
+      _rightMotor.go(turnSpeed);
+    }
+    
+    void turnRight(int turnSpeed)
+    {
+      _rightMotor.stop();
+      _leftMotor.go(turnSpeed);
     }
 
     void rotateLeft()
@@ -107,6 +113,7 @@ class Control
     int rotationSpeed;         
     int insideTurnSpeed;
     int outsideTurnSpeed;
+    int centerPulse;
     Motor _leftMotor, _rightMotor;
 
     

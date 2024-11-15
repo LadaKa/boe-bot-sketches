@@ -24,7 +24,7 @@ class Motor : public Servo
     void stop()
     {
       writeMicroseconds(_centerPulse);
-      write(90);
+      //write(90);
     }
 
     void setCenterPulseAndDirection(int centerPulse, bool right)

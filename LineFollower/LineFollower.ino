@@ -25,8 +25,8 @@ void setup() {
   
   //  button setup
   pinMode(BUTTON_PIN, INPUT_PULLUP);
-  attachInterrupt(
-    digitalPinToInterrupt(BUTTON_PIN), onButtonPressed, FALLING);
+ // attachInterrupt(
+ //   digitalPinToInterrupt(BUTTON_PIN), onButtonPressed, FALLING);
   lastButtonPressTime = 0;
   
   //  led setup
@@ -34,7 +34,7 @@ void setup() {
 
   //  robot setup
   robot.setMotors(MIN_PULSE, MAX_PULSE, SPEED, TURN_SPEED);
-  robot.setState(Enums::BeforeStart);
+  robot.setState(Enums::Running);//BeforeStart);
 
 }
 
@@ -42,7 +42,10 @@ void setup() {
 void loop() {
 
   Enums::State state = robot.getState();
-
+  //robot.testSensors();
+  //delay(1000);
+  //return;
+  delay(100)
   switch (state) {
     
     case Enums::Running:
@@ -62,8 +65,6 @@ void loop() {
 
 // button press handler (using interrupt)
 void onButtonPressed() {
-
-  //robot.flash();
   
   int currentTime = millis();
   if ((currentTime - lastButtonPressTime) < 1000)
@@ -78,10 +79,9 @@ void onButtonPressed() {
       robot.setState(Enums::Running);
       return;
     
-    case Enums::Running:
-      robot.stopMotors();
+    case Enums::Running:  
       robot.setState(Enums::BeforeStart);
-      robot.flash();
+      //robot.flash();
       return;
       
     default:
