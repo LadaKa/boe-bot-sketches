@@ -20,5 +20,6 @@
 
 #define SPEED 160//150
 #define TURN_SPEED 30 //30
+#define SPEED_DEGREE_MAX 50
 
 #endif#

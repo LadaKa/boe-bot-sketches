@@ -56,14 +56,14 @@ class Control
 
     void turnLeft(int turnSpeed)
     {
-      _leftMotor.stop();
-      _rightMotor.go(turnSpeed);
+      _leftMotor.go(insideTurnSpeed);
+      _rightMotor.go(outsideTurnSpeed + turnSpeed);
     }
     
     void turnRight(int turnSpeed)
     {
-      _rightMotor.stop();
-      _leftMotor.go(turnSpeed);
+      _rightMotor.go(insideTurnSpeed);
+      _leftMotor.go(outsideTurnSpeed + turnSpeed);
     }
 
     void rotateLeft()
